@@ -1,7 +1,6 @@
 console.log("Hello World")
 
-// get player choice via prompt - getPlayerChoice
-// get computer choice at random -getComputerChoice
+
 
 // run RPS between the two choices and return winning announcement
     //function parameters - playerChoice, computerChoice
@@ -16,10 +15,15 @@ console.log("Hello World")
     //display message "You lose, rock beats paper"
     //playerChoice should convert to lowercase
 
+
+let playerChoice = getPlayerChoice();
+let computerChoice = getComputerChoice();
+playRound(playerChoice, computerChoice);
+
 function getPlayerChoice() {
     let playerInput = prompt("Choose rock, scissors, or paper").toLowerCase();
     let playerChoice = checkPlayerChoice(playerInput);
-    console.log(playerChoice);
+    return playerChoice;
 }
 
 function checkPlayerChoice(playerInput) {
@@ -44,4 +48,45 @@ function getComputerChoice() {
 function getRandomNumber() {
     return Math.floor(Math.random() * 3);
 }
+
+function playRound(playerChoice, computerChoice) {
+    const winner = checkWinner(playerChoice, computerChoice);
+    const resultMessage = getResultMessage(playerChoice, computerChoice, winner);
+    console.log(resultMessage);
+}
+
+function checkWinner(playerChoice, computerChoice){
+    if(playerChoice === computerChoice){
+        return "draw";
+    } else if(playerChoice === "rock" && computerChoice === "scissors"
+        || playerChoice === "paper" && computerChoice === "rock"
+        || playerChoice === "scissors" && computerChoice === "paper") {
+            return "player";
+        } else {
+            return "computer";
+        }
+}
+
+function getResultMessage(playerChoice, computerChoice, winner) {
+    if(winner === "draw") {
+        return "It's a draw!";
+    } else if(winner === "player") {
+        const gameRule = getGameRule(playerChoice);
+        return "You won! " + gameRule;
+    } else {
+        const gameRule = getGameRule(computerChoice);
+        return "You lose! " + gameRule;
+    }
+}
+
+function getGameRule(winningChoice) {
+    if(winningChoice === "rock") {
+        return "Rock beats scissors!";
+    } else if(winningChoice === "paper") {
+        return "Paper beats rock!";
+    } else {
+        return "Scissors beats paper";
+    }
+}
+
 
