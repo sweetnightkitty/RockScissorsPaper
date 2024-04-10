@@ -105,5 +105,16 @@ function playGame() {
 
 }
 
-playGame();
+//playGame();
+
+const buttons = document.querySelectorAll("button");
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        let computerChoice = getComputerChoice();
+        let winner = playRound(button.className, computerChoice);
+        console.log("player: " + button.className);
+        console.log("computer: " + computerChoice);
+        console.log(winner);
+    });
+});
 
