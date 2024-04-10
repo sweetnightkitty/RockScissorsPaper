@@ -1,18 +1,5 @@
-
-
-function getPlayerChoice() {
-    let playerInput = prompt("Choose rock, scissors, or paper").toLowerCase();
-    let playerChoice = checkPlayerChoice(playerInput);
-    return playerChoice;
-}
-
-function checkPlayerChoice(playerInput) {
-    if(playerInput === "rock" || playerInput === "paper" || playerInput === "scissors") {
-        return playerInput;
-    } else {
-        alert("Error, refresh the page and try again");
-    }
-}
+let computerScore = 0;
+let playerScore = 0;
 
 function getComputerChoice() {
     const randomNumber = getRandomNumber();
@@ -75,46 +62,65 @@ function getGameRule(winningChoice) {
     }
 }
 
-function playGame() {
-    let playerScore = 0;
-    let computerScore = 0;
 
-    for (i = 0; i < 5; i++) {
-        let playerChoice = getPlayerChoice();
+
+    // const finalWinner = checkWinner(playerScore, computerScore);
+    // const resultMessage = getResultMessage(finalWinner);
+    // console.log(resultMessage);
+
+
+
+
+
+const buttons = document.querySelectorAll("button");
+buttons.forEach((button) => {
+    button.addEventListener("click", function playGame() {
         let computerChoice = getComputerChoice();
+        let playerChoice = button.className;
         let winner = playRound(playerChoice, computerChoice);
-        
-        if(winner === "player") {
-            playerScore++;
+        countScore(winner);
+        displayRoundResults(winner, playerChoice, computerChoice); // displays before score goes up
+
+        if(confirmGameOver(playerScore, computerScore) === "over") {
+            const finalWinner = checkWinner(playerScore, computerScore);
+            const resultMessage = getResultMessage(finalWinner);
+            console.log(resultMessage);
+            //remove event listener?
+        };
+    });
+});
+
+
+
+function displayRoundResults(winner, playerChoice, computerChoice){
+    if(winner === "player") {
             console.log("Player: " + playerScore + " Computer: " + computerScore);
             console.log(getResultMessage(winner) + getGameRule(playerChoice));
         } else if(winner === "computer") {
-            computerScore++;
             console.log("Player: " + playerScore + " Computer: " + computerScore);
             console.log(getResultMessage(winner) + getGameRule(computerChoice));
         } else {
             console.log("Player: " + playerScore + " Computer: " + computerScore);
             console.log(getResultMessage(winner));
         }
-    }
-
-    const finalWinner = checkWinner(playerScore, computerScore);
-    const resultMessage = getResultMessage(finalWinner);
-    console.log(resultMessage);
+};
 
 
-}
 
-//playGame();
 
-const buttons = document.querySelectorAll("button");
-buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-        let computerChoice = getComputerChoice();
-        let winner = playRound(button.className, computerChoice);
-        console.log("player: " + button.className);
-        console.log("computer: " + computerChoice);
-        console.log(winner);
-    });
-});
 
+
+
+function countScore(winner) {
+    if(winner === "player") {
+        playerScore++;
+    } else if(winner === "computer") {
+        computerScore++;
+    };
+};
+
+
+
+function confirmGameOver(playerScore, computerScore) {
+    if(playerScore === 5 || computerScore === 5) return "over";
+};
