@@ -1,4 +1,12 @@
-const buttons = document.querySelectorAll("button");
+const buttons = document.querySelectorAll(".btn");
+const container = document.querySelector(".container");
+const scores = document.createElement("p");
+const announcement = document.createElement("p");
+const gameResult = document.createElement("p");
+
+const playAgainButton = document.createElement("button");
+playAgainButton.innerText = "Play again?";
+
 let computerScore = 0;
 let playerScore = 0;
 
@@ -62,20 +70,27 @@ function playRound(playerChoice) {
     let computerChoice = getComputerChoice();
     let winner = checkWinner(playerChoice, computerChoice);
     countScore(winner);
+    console.log(playerChoice);
+    console.log(computerChoice);
     displayRoundResults(winner, playerChoice, computerChoice);
 }
 
 
 buttons.forEach((button) => {
     button.addEventListener("click", function playGame() {
-        let playerChoice = button.className;
+        //disables rock scissors paper buttons after game ends
+        if(confirmGameOver(playerScore, computerScore) === "over") return
+
+        let playerChoice = button.getAttribute("id");
         playRound(playerChoice);
 
         if(confirmGameOver(playerScore, computerScore) === "over") {
             const finalWinner = checkWinner(playerScore, computerScore);
             const resultMessage = getResultMessage(finalWinner);
-            console.log(resultMessage);
-            //remove event listener - to stop further play
+            gameResult.textContent = resultMessage;
+            container.appendChild(gameResult);
+            container.appendChild(playAgainButton);
+
         };
     });
 });
@@ -84,20 +99,18 @@ buttons.forEach((button) => {
 
 function displayRoundResults(winner, playerChoice, computerChoice){
     if(winner === "player") {
-            console.log("Player: " + playerScore + " Computer: " + computerScore);
-            console.log(getResultMessage(winner) + getGameRule(playerChoice));
+            scores.textContent = "Player: " + playerScore + " Computer: " + computerScore;
+            announcement.textContent = getResultMessage(winner) + getGameRule(playerChoice);
         } else if(winner === "computer") {
-            console.log("Player: " + playerScore + " Computer: " + computerScore);
-            console.log(getResultMessage(winner) + getGameRule(computerChoice));
+            scores.textContent = "Player: " + playerScore + " Computer: " + computerScore;
+            announcement.textContent = getResultMessage(winner) + getGameRule(computerChoice);
         } else {
-            console.log("Player: " + playerScore + " Computer: " + computerScore);
-            console.log(getResultMessage(winner));
-        }
+            scores.textContent = "Player: " + playerScore + " Computer: " + computerScore;
+            announcement.textContent = getResultMessage(winner);
+        };
+    container.appendChild(scores);
+    container.appendChild(announcement);
 };
-
-
-
-
 
 
 
@@ -114,3 +127,12 @@ function countScore(winner) {
 function confirmGameOver(playerScore, computerScore) {
     if(playerScore === 5 || computerScore === 5) return "over";
 };
+
+playAgainButton.addEventListener("click", () => {
+    playerScore = 0;
+    computerScore = 0;
+    container.removeChild(scores);
+    container.removeChild(announcement);
+    container.removeChild(gameResult);
+    container.removeChild(playAgainButton);
+})
