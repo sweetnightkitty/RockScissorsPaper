@@ -1,3 +1,4 @@
+const buttons = document.querySelectorAll("button");
 let computerScore = 0;
 let playerScore = 0;
 
@@ -16,11 +17,6 @@ function getRandomNumber() {
     return Math.floor(Math.random() * 3);
 }
 
-function playRound(playerChoice, computerChoice) {
-    const winner = checkWinner(playerChoice, computerChoice);
-    const resultMessage = getResultMessage(playerChoice, computerChoice, winner);
-    return winner;
-}
 
 function checkWinner(playerChoice, computerChoice){
     if(playerChoice === computerChoice){
@@ -60,32 +56,26 @@ function getGameRule(winningChoice) {
     } else {
         return "";
     }
+};
+
+function playRound(playerChoice) {
+    let computerChoice = getComputerChoice();
+    let winner = checkWinner(playerChoice, computerChoice);
+    countScore(winner);
+    displayRoundResults(winner, playerChoice, computerChoice);
 }
 
 
-
-    // const finalWinner = checkWinner(playerScore, computerScore);
-    // const resultMessage = getResultMessage(finalWinner);
-    // console.log(resultMessage);
-
-
-
-
-
-const buttons = document.querySelectorAll("button");
 buttons.forEach((button) => {
     button.addEventListener("click", function playGame() {
-        let computerChoice = getComputerChoice();
         let playerChoice = button.className;
-        let winner = playRound(playerChoice, computerChoice);
-        countScore(winner);
-        displayRoundResults(winner, playerChoice, computerChoice); // displays before score goes up
+        playRound(playerChoice);
 
         if(confirmGameOver(playerScore, computerScore) === "over") {
             const finalWinner = checkWinner(playerScore, computerScore);
             const resultMessage = getResultMessage(finalWinner);
             console.log(resultMessage);
-            //remove event listener?
+            //remove event listener - to stop further play
         };
     });
 });
